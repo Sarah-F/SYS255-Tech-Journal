@@ -1,0 +1,83 @@
+Lab 01 - Virtual Firewall and Windows 10 Configuration
+
+PfSense - fw01
+The PfSense firewall will provide routing services between a Local Area Network and Wide Area Network in your VSphere environment.
+Figure out how to modify the settings of your fw01 VM, and make sure that the first network adapter is assigned to WAN and the second assigned to the LAN-yourname network.
+Essentially, you have “cabled” your firewall VM’s network adapters. 
+Steps:
+  -Power on your fw01 VM. and Open a VM Console
+  -Find the menu items or icons that allow you to first power on, and then open a web console to your firewall virtual machine.
+  -Your WAN and LAN are either missing network configuration information or contain default IP addresses. 
+      -PfSense also assumes that the first interface is wired to your LAN, which is incorrect. 
+      -In the next few steps, we will assign our interfaces to the appropriate network and configure IP addresses on each interface.
+Step 1: Assign Interfaces
+Our interfaces should be assigned in the same order as they appeared in our VMWare configuration, namely the WAN should be associated with the first interface and the LAN should be associated with the second interface. 
+
+Select 1 to reassign Network Interfaces and follow the following steps:
+For due diligence, double check the MAC addresses to match what vSphere displays above.
+
+Do not configure VLANs now
+The WAN interface name should be changed to em0
+The LAN interface name should be changed to em1
+If prompted for an optional interface, just select <ENTER>
+
+Step 2: Set interface IP address
+The first interface em0 will be assigned to an address that is documented in the course Network Assignments. This interface represents the outside of your network.
+Select 2 to Set interface IP Address
+Select 2 again to pick the WAN interface
+Do not use DHCP to configure the WAN IPv4 address
+Enter your address of 10.0.17.x, where X is your assigned /24 octet
+You are using a 24 bit subnet mask
+For the WAN, your upstream gateway is 10.0.17.2
+Use the gateway as your IPv4 name server as well
+We will not be using IPv6, respond no when asked about DHCP.
+Press <ENTER> to bypass IPv6 configuration
+When asked about HTTP for the GUI, respond no (we want to use secure https)
+Select 2 again to configure the other Interface's IP Address
+Select 1 to pick the LAN interface
+We are not using DHCP
+Your LAN IP Address is 10.0.5.2.  This is the same for every student.
+You are using a 24 bit subnet mask
+You do not have an upstream LAN gateway (you are the gateway for the LAN).  Press <ENTER>
+No DHCP
+Press <ENTER> to bypass IPv6 configuration
+Do not enable a LAN DHCP Server
+Do not revert to HTTP
+
+We will come back to fw01 to complete the configuration through the web interface once we have a Windows 10 client to use.
+
+Windows 10 - wks01
+Figure out how to adjust wks01's VMWare Network Configuration such that it is on your LAN segment
+Your hostname/computer name should be set to wks01-yourfirstname, you will need to figure out how to do this.
+Here are specific instructions on how to add a new local administrative user.
+You should be now in your new local admin account, with your new hostname.
+Make sure you have the following network configuration items taken care of following installation:
+
+fw01 gui configuration
+You may have noticed that your Windows 10 system is not connected to the internet, so we will need to adjust our firewall (fw01) to make this happen. Navigate to fw01's IP LAN IP address (bypass any certificate warning).
+
+The following are screens where you need to change the default.
+System Wizard: General Information
+Hostname: fw1-yourname
+Domain: yourname.local
+Primary DNS: 8.8.8.8
+System Wizard:  Configure WAN Interface
+RFC1918 Networks:  Uncheck "Block private networks from entering via WAN"
+System / User Manager:  Set Root Password
+Up to you. If you set it, then you need to remember it!
+
+Deliverable 1:  Screenshot showing a successful ping from fw01 to champlain.edu:  Select 8 to get a shell, and then execute the ping shown below.  Type exit to leave the command shell.(3 points)
+
+Deliverable 2: On wks01, figure out how to invoke powershell and provide a screenshot similar to the one below showing the output of the following commands:  whoami, hostname, ping -n 1 google.com and ipconfig (2 points)
+
+Deliverable 3:  Take a screenshot showing successful navigation from wks01 to champlain.edu using chrome.  Make sure to get the Virtual Machine Name banner (2 points)
+
+Deliverable 4: On wks01, research how to use the tracert command against champlain.edu with a maximum of three hops.  This command should illustrate how packets are being routed from your private LAN to your WAN Provide a screenshot showing your tracert command and hops 1-3. (1 points)
+
+Deliverable 5:  Consider this lab.  What technical terms or steps were you unfamiliar with?  Provide at least 3 examples (1 point).  Example:
+
+The lab mentioned a default gateway a couple times.  What is that and why is it important?
+
+Deliverable 6.  Your deliverable meets the submission guidelines.
+
+Deliverable 7. Tech Journal entry. Make your github public & include URL. 
