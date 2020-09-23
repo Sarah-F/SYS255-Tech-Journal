@@ -1,0 +1,75 @@
+Lab 03 Linux Configuration
+
+Process for setting a static IP address on CentOS Linux
+  Check for an IP address (ifconfig)
+  Type nmtui
+  Select Edit a connection
+  Press enter on ens192
+  Change IPv4 from Auto to Manual
+  Press the right key and press enter on Show
+    Enter IP Address include netmask (x.x.x.x/xx)
+    Enter Default Gateway
+    Enter DNS server
+    Enter Domain Controller/Search domain ()
+    Make sure there is an X in the Automatically connect box
+    Select OK
+  Select Back
+  Press OK (if you want to set hostname instead of pressing ok press the down arrow twice and select Set System Hostname and type dhcp01-yourname in the field, then select OK and quit)
+
+Added a privileged user using steps from previpus lab
+
+Deliverable 1.  Login as the named user (not root!) and attempt to ping google.com, ad01 and fw01.  Provide a screenshot similar to the one below that shows the three successful pings.
+
+DNS: Added an A and PTR record for dhcp01 to the DNS configuration on ad01. Tested this by issuing a ping from wks01 to dhcp01 using the undistinguished hostname.
+
+Deliverable 2.  Using WKS01, Provide a screenshot showing the successful ping using dhcp01's hostname only (leave off yourname.local).
+
+Deliverable 3.  Provide a screenshot that shows a successful ssh session as your named linux user.
+
+pwd = show present working directory
+
+cd /home
+ls
+= navigate to /home directory and list the contents
+
+cd..
+ls
+= navigate up to the parent directory using a relative cd .. command.
+
+ls -l = long listing of files and directories
+
+
+man hier = show the manual page indicating what each directory in the file hierarchy is used for
+
+
+cd ~
+= Use the "tilde" shortcut to go to the home directory ~
+
+mkdir = make durectory
+
+sudo = will elevate privalages
+
+groups = Show the groups your user has been assigned to. 
+
+sudo -i = Become root for an extended time
+
+Deliverable 4:
+
+history | head -n 10 
+=will show you the first 10 commands recorded in your history file
+
+ls ~
+ls -la ~
+= This command lists those hidden files (those that start with a period)
+
+ls .bash_history
+cat .bash_history
+= View .bash_history (if it is missing, logout of ssh and log back in again).
+
+Deliverable 5.  This is a two part question:
+What security implications does this file represent.  List at least one pro and one con.  
+    Pro: Allows you to look at all the commands you have just used
+    Con: This file is easily accessible, so it may allow others to look at all the commands you have just used
+What command is used to clear bash history?
+    cat /dev/null > ~/.bash_history
+
