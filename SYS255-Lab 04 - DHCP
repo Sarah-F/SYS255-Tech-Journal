@@ -1,0 +1,105 @@
+Lab 04 DHCP
+
+SSH from AD01 -> DHCP01
+Disable IE Enhanced Security Configuration: Use either PuTTY or Powershell SSH from AD01 to access your CentOS server from now on!
+ssh sarah@dhcp-sarah
+
+Follow instructions in image
+
+Install PuTTY: download link in image
+
+Connect via PuTTY: Follow instructions in image
+
+Run the installation command as an elevated user, using sudo.
+--> sudo yum install dhcp
+
+
+Configuring DHCP Services
+Become the system user for a brief period of time using the sudo -i command, and then open the dhcp configuration file using the vi or nano text editor.
+    sudo -i
+    vi /etc/dhcp/dhcpd.conf
+
+Typing very carefully, enter the following into your new file below the comments (# denotes a comment).  Change the domain-name to yourname.local.
+    #
+    # DHCP Server Configuration file.
+    #   see /usr/share/doc/dhcp*/dhcpd.conf.example
+    #   see dhcpd.conf(5) man page
+    #
+    subnet 10.0.5.0 netmask 255.255.255.0 {
+        option routers 10.0.5.2;
+        option subnet-mask 255.255.255.0;
+        option domain-name "name.local";
+        option domain-name-servers 10.0.5.5;
+        range 10.0.5.100 10.0.5.150;
+    }
+    
+
+Starting DHCP Services
+
+To start dhcp, type the following as root:
+--> systemctl start dhcpd
+
+Start dhcpd and check its status.  Note any errors and check the syntax of dhcpd.conf accordingly.
+--> systemctl status dhcpd
+
+
+Enabling the service to start at boot.
+
+💣Forgetting to enable a service to start on boot will cause the service to fail when the system is rebooted.  Remember this if a service worked fine one day and does not after a reboot.  
+--> systemctl enable dhcpd
+
+
+Configuring the Firewall to allow incoming DHCP requests
+The default configuration on CentOS is to enable the firewall and allow both ICMP and SSH requests in.  The DHCP server will not work until we enable the firewall.  We will be using firewalld and the firewall-cmd utility to make this happen.  The “firewall-cmd --list-all” option shows the default firewall that allows dhcpv6-client (not to be confused with dhcp server) and ssh.  We will add the dhcp service (as opposed to ports).
+The following syntax adds the ports associated with dhcp permanently.  The --permanent flag is important.  If you fail to add this, the next time you reboot, your changes will be lost.  Make sure you reload the firewall to invoke the change.  List all the rules and make sure your dhcp service has been added.
+💣Don't forget the --permanent flag, nor forget to reload! 
+
+    firewall-cmd --add-service-dhcp --permanent
+    firewall-cmd --reload
+    firewall-cmd --list-all
+
+Type exit to leave your elevated state and exit again to exit PuTTY.
+
+Windows 10 DHCP Client
+As a privileged user, you will now re-configure networking on WKS01 to use dynamic addressing rather than static addresses.
+
+Follow image instructions (go to IPV4 properties and select Obtain an IP address automaticallly and Obtain DNS server address automatically)
+
+Deliverable 1.  Take a snapshot of the results of ipconfig /all.  Note the DHCP server of 10.0.5.3 should be there, your IP address should be the first ip address in the range you set earlier.  Your domain name, netmask and gateway should also be set correctly.
+
+Deliverable 2.  Log back into dhcp01 and find the dhcp log associated with wks01's request for dhcp information.  Take a snapshot similar to the one below.  The IP address, the workstation name, the layer 2 address should all match between deliverables 1 and 2.
+
+The following command looks pretty complex, but let's break it down:
+sudo - raises our privileges because /var/log/messages is owned by the root user.
+cat - writes the file /var/log/messages to the screen
+| - sends the output of the previous command to the next command
+grep wks01-yourname - filters input for the string wks01-yourname.
+
+--> cat passwd | grep name
+--> sudo cat /var/log/messages | grep wks01-name
+
+
+
+Wireshark
+Run a capture session against WKS01's Ethernet0 adapter
+As an administrative user.  Go ahead and release the current DHCP release and then renew it.  Your objective is to capture the four DHCP messages between client and server.
+You release your current DHCP release using the following command:
+
+ipconfig /release
+ipconfig /renew
+ipconfig /all
+
+Stop the capture and create a wireshark display filter that shows UDP traffic sourced or destined to port 67.  Browse each of the four messages to get a handle on source, destination addresses (layer 2, layer 3) and ports and the sequence of messages used to provide WKS01 another leased IP address.
+
+Deliverable 3.  Provide a screenshot similar to the one below that shows the 4 Key DHCP Messages.
+
+Challenging Yourself
+Deliverable 4. Figure out how to change the default lease time given to dhcp clients to 1 hour with a max lease time of four hours. Provide a screenshot displaying new configuration.
+vi /etc/dhcdp.conf
+default-lease-time  86400;   # 1 hour
+max-lease-time      172800;  # 4 hours
+
+https://www.brennan.id.au/10-DHCP_Server.html 
+
+Deliverable 5. Tech Journal Entry - Explore 3 other items related to DHCP, and dig into their related Wireshark captured packets.
+
