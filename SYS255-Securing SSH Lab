@@ -1,0 +1,18 @@
+Sarah Fornaldes
+SYS 255
+Fall 2020
+Securing SSH
+
+💣Allowing remote access to a known user account like Administrator, root or admin for OpnSense is a terrible idea.  It allows an attacker to conduct an exhaustive attack using dictionaries of passwords against these known user accounts.  A security best practice is to disable Remote access as root.
+
+How to disable SSH root user access to dhcp01.  Prove you have done this correctly by conducting a test via PuTTY.
+      Use sudo vi /etc/ssh/sshd_config to edit the config file for ssh
+      Find #PermitRootLigin yes, underneath it write PermitRootLogin no
+      Use sudo systemctl restart sshd.service to restart the ssh service.
+   To prove I have done this correctly by conducting a test via PuTTY.
+
+Deliverable 1.  Once you are convinced that root can no longer login, provide a screenshot that shows how this failure was captured in the logs:
+    cat /var/log/log/secure | grep "not met"
+
+Deliverable 2.  Figure out how to determine what roots uid (user id is).  What is it and based on the logs, what logic is used to prevent root's login?
+    If the user id is below 1000, then the account will be disabled.
