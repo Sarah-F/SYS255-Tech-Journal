@@ -103,3 +103,9 @@ https://www.brennan.id.au/10-DHCP_Server.html
 
 Deliverable 5. Tech Journal Entry - Explore 3 other items related to DHCP, and dig into their related Wireshark captured packets.
 
+DHCP has several different types of packets: 
+Release: when the user sends a request to the DHCP server to release the users current IP address and cancel the leasen
+Discover: when the user discovers the DHCP server
+Offer: when the DHCP server offers the user an IP address on the network
+Request: when the user accepts the IP address and asks the DHCP server to give it the address
+Ack: when the DHCP server acxknowledges the request and officially sets the IP address tp the user 
