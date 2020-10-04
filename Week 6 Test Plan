@@ -1,0 +1,73 @@
+Step 1: Configure a firewall - Lab 01
+1. Open Chrome to the fw01 IP LAN IP address (10.0.5.2)
+2. Modify firewall settings
+  A. System Wizard: General Information
+    I - Hostname: fw1-sarah
+    II - Domain: sarah.local
+    III - Primary DNS: 8.8.8.8
+  B. - System Wizard: Configure WAN Interface
+    I - RFC1918 Networks: Uncheck "Block private networks from entering via WAN"
+  C. - System/User Manager
+    I - Set Root Password
+
+Step 2: Domain Controller - Lab 02
+1. Open ad01 VM
+2. Open Server Manager
+3. Promote this server to a domain controller
+4. Create new forest (sarah.local)
+5. Enter a DSRM password
+6. Sign in as Domain Administrator instead of Local Administrator
+  A - champuser
+  B - Ch@mpl@1n!20
+7. Open Server Manager/DNS/AD01/DNS Manager
+8. Add Reverse Lookup Zone
+  A - Network ID: 10.0.5
+9. Expand forward lookup zone (DNS/ad01/Forward Lookup Zones/sarah.local)
+10. Right click and select New Host
+  A - Host: fw01-sarah
+  B - IP Address - 10.0.5.2
+  C - Update associated pointer PTR record
+
+
+Step 3: DHCP Server - Lab 04
+1. SSH into DHCP server using ad01 VM with PuTTY
+  A - dhcp01-sarah
+2. sudo yum install dhcp
+3. sudo -i, nano /etc/dhcp/dhcp.conf
+  A - 
+  subnet 10.0.5.0 netwask 255.255.255.0 {
+          option routers 10.0.5.2;
+          option subnet-mask 255.255.255.0;
+          option domain-name "sarah.local";
+          option domain-name-servers 10.0.5.5;
+          range 10.0.5.100 10.0.5.150;
+4. systemctl start dhcpd
+5. systemctl enable dhcpd
+6. firewall-cmd --add-service=dhcp --permanent
+7. firewall-cmd --reload
+8. firewall-cmd --list-all
+
+
+Step 4: Join a workstation to the domain and network via DHCP
+1. On Windows VM, change network information to "Obtain an IP address automatically"
+2. On Linux VM, view Week 3 Notes
+  A - Login as root
+  B - ntmui
+  C - Select interface and press enter
+  D - Change Automatic IPv4 configuration to Manual
+  E - Show
+  F - Add IP address(es) (with /24 for subnet mask), gateway, DNS server(s), and search domain(s)
+  G - Make sure that Automatically connect has an "X"
+  H - Press Ok
+  I - Press back
+  J - Select "Set system hostname"
+  K - Type in system hostname (dhcp01-sarah)
+  L - Press Ok, then Quit
+  M - Verify IP address with ifconfig
+  N - If no IP address is there, type systemctl restart network
+  O - Type exit to change the hostname, and sign back in
+  P - Login as root
+  Q - useradd [name]
+  R - passwd [name]
+  S - usermod -aG wheel [name]
+  T - (optional) to sudo in, sudo -l
