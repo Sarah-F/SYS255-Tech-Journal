@@ -10,6 +10,7 @@ Step 1: Configure a firewall - Lab 01
   C. - System/User Manager
     I - Set Root Password
 
+
 Step 2: Domain Controller - Lab 02
 1. Open ad01 VM
 2. Open Server Manager
