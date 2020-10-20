@@ -1,0 +1,111 @@
+Server Core / Remote Administrator Tools
+
+1. Set up username and password
+2. How to Change Network Settingds
+  Type "sconfig" to get to the server configuration section
+    Enter 8 --> to change network settings
+      Enter 1
+        Enter 1 --> Set network adapter address
+          Enter S
+          - enter ip address, netmask, and gateway
+        Enter 2, --> set DNS server, enter DNS address
+      Enter 4 --> to return to server configuration
+    Enter 2 --> to change Computer Name --> FS01-FORNALDES, after you change name, 
+    VM will reboot
+3. How to join your Active Directory Domain using sconfig's Domain/Workgroup option
+  Type "sconfig"
+    Enter 1
+      Type D
+      Name of domain to join: sarah.local
+      Specify an authorized domain\user: sarah\sarah.fornaldes-adm
+    VM will reboot
+Deliverable 1 - Show the sconfig cmd after setting the network, computer name, update settings, and changing the domain. (example below)
+
+4. Log in to the domain upon reboot using your adm account via the Other user option.
+  When VM reboots, hit ESC until you see option to switch to other user
+    user: sarah.fornaldes-adm
+    pass: Password123
+5. Use RSAT to manage Active Directory: 
+      Go to AD02, log in using adm account
+      Click 'Manage' (in the top right corner), 
+      Click 'Add Roles and Features', 
+      Make sure features shown in image are selected, if they are not then select the proper ones.
+  Add FS01 to 'All Servers'
+      Click on 'All Servers', 
+      Right click on 'All Servers', 
+      Click 'Add Servers'
+          in the box 'Name (CN):' type 'fs',
+          Click 'Find Now'
+          Select 'fs01-sarah'
+          Click the arrow on the screen
+          (LOOK AT IMAGE FOR COMPARISON)
+Deliverable 2.   Provide a screenshot that shows that from AD02, you have access to FS01 and AD02
+
+6. How to add an organizational unit (OU)
+  1. Click on 'AD DS'
+  2. Right click on 'AD02-SARAH'
+  3. Select 'Active Directory Users and Computers'
+  4.Right click on 'sarah.local 
+  5.Click on 'New', click on 'Organizational Unit'
+    Name it "SYS-255"
+  6.Under to SYS-255, add OU's named 'Computers' 'Users' and 'Groups' (Pretty much repeat of step 5)
+    Under Groups: add a new Global security group called 'Sales-Users' (SYS255\Groups OU) (Right click, new, group)
+    Under Users: add 'Bob' and 'Alice' as standard domain users (SYS255\Users OU) (Bob user = bob, Alice user = alice, pass = Password123)
+    Add Alice to the Sales-Users group
+      Go to groups
+      Right click on 'Sales-Users'
+      Click 'Properties'
+      Click 'Members'
+      Click 'Add'
+      Type 'Alice'
+      Click 'Ok'
+      Click 'Apply'
+      Click 'Ok'
+ 
+7. Use RSAT to add File Services to FS01 and create a Sales Users share
+On AD02, Use the Add Roles and Features option on FS01
+  Click on 'All Servers'
+  Right click on 'FS01-SARAH'
+  Click 'Add Roles and Features'
+  Click 'Next' until you get to 'Server Roles'
+    Select the setting shown in the image
+
+  1. Run the following command on fs01 to open the firewall for managing the File Server
+      netsh advfirewall firewall set rule group=”Remote File Server Resource Manager Management” new enable=yes
+  2. (Steps written out below) Back on AD02, Connect to FS01 using File Server Resource Manager to test the command just ran above.  Make sure to select Files and Storage Services -> Servers.
+      Go to 'File and Storage'
+      Click on the little arrow next to 'File and Storage'
+      Click on 'Servers'
+      Riight click on 'FS01-SARAH'
+      Select 'File Server Resource Manager' 
+Deliverable 3:  Take a screenshot of the FSRM similar to that below:
+
+Create a new share on FS01 using Server Manager
+  1. (Steps written out below) Launch Server Manager and create a New Share
+      Go to 'File and Storage'
+      Click on the little arrow next to 'File and Storage'
+      Click on 'Shares'
+        1. Right click on the blank area in the 'Shares box' and select 'New Share'
+        2. Choose 'SMB Share - Quick'
+        3. In the 'Share Location' tab, Select 'FS01-SARAH', leave the Select by volume options alone
+        Click 'Next'
+        4. In the 'Share Name' tab, 
+            In the box next to 'Share name:' type 'Sales'
+            (Look at image for reference)
+        5. Click 'Next', Leave the Other Settings section alone, Click 'Next'
+        6. (Steps written out below) For permissions, assign the Sales-Users Group created earlier with full control custom permissions to the share.  Remove "Everyone access to the Share".
+            You are in the 'Permissions' tab,
+            Click 'Customize permissions'
+            Click the 'Share' tab
+            Click 'Add'
+            Click 'Select a principal'
+            Type 'Sales-Users'
+            Click 'Full Control'
+            Click 'OK'
+            Delete the 'Allow Everyone' permission entry that was originally there
+            Click apply, then okay, then finish setting up the new share. (click next, create, close)
+            (look at image for reference)
+            
+Test access for Bob and Alice. 
+Deliverable 4:  Test access to the \\fs01-yourname\Sales while alternately logged into wks02 as Bob and as Alice.  Provide screenshots showing that Alice can write and read from \\fs01\Sales and that Bob cannot.
+
