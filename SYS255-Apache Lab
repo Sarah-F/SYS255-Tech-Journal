@@ -1,0 +1,64 @@
+SSH Security Header
+Disable remote root ssh access within the PermitRootLogin no flag in  /etc/ssh/sshd_config file. 
+  -Use web01 vm
+  -"cd /etc/ssh"
+  -"vi sshd_config"
+  -type "i" to edit
+  -find the line that says "#PermitRootLogin yes", underneath it type "PermitRootLogin no"
+  -hit esc button
+  -type ":wq"
+  -Restart sshd, logout and login in again, so that your new hostname takes hold in the active session.
+    -To restart the SSHD
+        -In web01, type "service sshd restart"
+        -Type reboot to restart vm
+        -Enter the password and the service will restart
+        -Tyoe "service sshd status" to check the status of a service
+
+Deliverable 1.  Using PuTTY or SSH from ad02 to web01, provide a screenshot that shows: 
+    -Your console login as a named sudo user and your elevation to root. The hostname should already be set.  This implies that wks01 has network connectivity, you have downloaded PuTTY (you may need to work your way around the DHCP outage) and that you have properly configured DNS for web01.
+    -nslookup to 10.0.5.4
+    -ping to champlain.edu
+
+Running Apache Header
+How to install HTTPD on web01 (we are installing Apache)
+    -Type "yum install httpd" 
+    -Type "y"
+Add ports 80/tcp & 443/tcp or the HTTP and HTTPS defined services to your firewall.  Don't forget to add rules permanently, and reload the firewall.
+    -Check firewall status "firewall-cmd --state", the respose should say "running"
+    -Type "firewall-cmd --get-active-zones" to retrieve your currently active zones, it should say "public interfaces: ens192", we will be adding the ports to that zone)
+    -To open port 80 type the following command: "firewall-cmd --zone=public --permanent --add-service=http
+    -To open port 443 type the following command: "firewall-cmd --zone=public --permanent --add-service=https
+    -Reload your firewall "firewall-cmd --reload"
+    -the word "success should be returned for the last 3 steps"
+    -Type "firewall-cmd --list-all" to make sure that http and https have been added to the firewall settings, you should see http and https in the services tab
+    -Type "systemctl start httpd" to start HTTPD
+    -Type "systemctl status httpd" to check the status of HTTPD
+
+Deliverable 3.  Provide a screenshot showing wks browsing to web01 by hostname
+Go ahead and remove the welcome.conf file referenced in the message and add a new file to /var/www/html/ called index.html.  Add a welcome message including your hostname.  Make sure you restart httpd, after you remove welcome.conf .
+  -How to remove the welcome message file in the web server
+    -On web01 type "rm /etc/httpd/conf.d/welcome.conf", them type "yes" to remove the welcome message file
+    -Type "systemctl restart httpd" to restart httpd
+  -How to add a new webpage to your webserver
+    -On web01, type "cat > /var/www/html/index.html"
+    -Type "vi /var/www/html/index.html" to enter file
+    -Type "i" to edit 
+    -Type "<h1>Welcome to Sarah's Web Server</h1>"
+    -Hit esc button
+    -Yype ":wq"
+    -Restart httpd "systemctl restart httpd"
+Deliverable 4.  Provide a screenshot similar to the one below, make sure to browse by hostname.
+
+PHP Header
+  Intall PHP: "yum install php" then type "y"
+  -Create a page with PHP
+    1. Type "cat > /var/www/html/index.php" PHP AT THE END
+    2. Type in your php based code (look up a reference or return to the lab "Week 8 - Apache Lab")
+    3. Press control + c
+    4. Restart your httpd service (systemctl restart httpd)
+    5. Check on wsk02 that it works (url web01-jason/index.php)
+  I. Install realmd for a linux system to work on a windows ADD
+    1. Type "sudo yum install realmd samba samba-common-tools oddjob oddjob-mkhomedir sssd"
+    2. Restart httpd
+    3. Join the domain using the command "realm join --user=jason.quiroga-adm@jason.local jason.local" then type "realm list"
+
