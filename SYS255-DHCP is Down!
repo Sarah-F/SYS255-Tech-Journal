@@ -6,22 +6,46 @@ How to set up a DHCP server on windows
           -Before You Begin: Click 'next'
           -Installation Time: Make sure 'Role-based or feature-based installation' is selected and click 'next'
           -Server Selection: Select 'fs01-sarah.sarh.local' as the destination server and click 'next'
-          -Server Roles: Select 'DHCP' and click 'next'
-          -Features: click 'next'
-          -DHCP Server: click 'next'
+          -Server Roles: Click 'next'
+          -Features: Click the carrot by 'Remote Server Administration Tools'--> 'Role Administration Tools'--> select 'DHCP server Tools', click 'next'
+          -DHCP Server: click 'next'(If still there)
           -Confirmation: select 'restart destination server automatically if required' and click 'install'
     -Select 'DHCP'
         -There will be a yellow bar, click 'more'
         -Select 'Configure DHCP Server'
           -Description: click 'next'
           -Authorization: make sure "Use the following user's credentials" is selected and click 'commit'
-    -Click 'Tools' in the righthand corner
-    -Click 'DHCP'
+https://computingforgeeks.com/how-to-install-and-configure-dhcp-server-on-windows-server/
 
 Setting up an IP Scope
-    -Go to the 'DHCP' tab, 
-        -Right click on FS01-SARAH
-        -Select "DHCP Manager"
-        -More steps to come when lab gets comnpleted
-
-https://computingforgeeks.com/how-to-install-and-configure-dhcp-server-on-windows-server/
+    -Go to the 'All Servers' tab, 
+        -Right click on 'FS01-SARAH'
+        -Select ,DHCP Manager'
+        -Right click 'IPv4'
+        -Select 'new scope'
+            -Start Up Wizard Page: 
+                -Click 'next'
+            -Scope Name Page:
+                -Enter a name: 'ScopeAD02'
+                -Enter a description: '10.0.5.100-10.0.5.150'
+            -IP Address Range Page:
+                Start IP: 10.0.5.100
+                End IP: 10.0.5.150
+                Length: 24 (CIDR notation)
+                Subnet mask: 255.255.255.0 (will automatically be written when you enter the length)
+            -Add Exclusions and Delay Page:
+                -click 'next'
+            -Lease Duration Page:
+                -'1 day', click 'next'
+            -Configure DHCP Options Page:
+                -Select 'Yes, I want to configure these options now', click 'next'
+            -Router (Default Gateway) Page:
+                -Enter the default gateway '10.0.5.2' and click 'next'
+            -Domain Name and DNS Servers:
+                -Enter the IP of the DNS Server '10.0.5.6' and click 'add', and then 'next'.
+            -WINS Servers Page:
+                -Click 'next'
+            -Activate Scope Page:
+                -Select 'Yes, I want to activate this scope now' and click 'next'
+            -Finish
+https://www.serverlab.ca/tutorials/windows/network-services-windows/step-step-creating-windows-server-dhcp-scope/
