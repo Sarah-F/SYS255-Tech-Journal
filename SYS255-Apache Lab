@@ -48,17 +48,3 @@ Go ahead and remove the welcome.conf file referenced in the message and add a ne
     -Yype ":wq"
     -Restart httpd "systemctl restart httpd"
 Deliverable 4.  Provide a screenshot similar to the one below, make sure to browse by hostname.
-
-PHP Header
-  Intall PHP: "yum install php" then type "y"
-  -Create a page with PHP
-    1. Type "cat > /var/www/html/index.php" PHP AT THE END
-    2. Type in your php based code (look up a reference or return to the lab "Week 8 - Apache Lab")
-    3. Press control + c
-    4. Restart your httpd service (systemctl restart httpd)
-    5. Check on wsk02 that it works (url web01-jason/index.php)
-  I. Install realmd for a linux system to work on a windows ADD
-    1. Type "sudo yum install realmd samba samba-common-tools oddjob oddjob-mkhomedir sssd"
-    2. Restart httpd
-    3. Join the domain using the command "realm join --user=jason.quiroga-adm@jason.local jason.local" then type "realm list"
-
