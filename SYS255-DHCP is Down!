@@ -1,0 +1,27 @@
+How to set up a DHCP server on windows
+    -Log on to AD02 
+    -Go to 'All Servers'
+        -Right click on FS01-SARAH
+        -Click 'Add Roles and Features'
+          -Before You Begin: Click 'next'
+          -Installation Time: Make sure 'Role-based or feature-based installation' is selected and click 'next'
+          -Server Selection: Select 'fs01-sarah.sarh.local' as the destination server and click 'next'
+          -Server Roles: Select 'DHCP' and click 'next'
+          -Features: click 'next'
+          -DHCP Server: click 'next'
+          -Confirmation: select 'restart destination server automatically if required' and click 'install'
+    -Select 'DHCP'
+        -There will be a yellow bar, click 'more'
+        -Select 'Configure DHCP Server'
+          -Description: click 'next'
+          -Authorization: make sure "Use the following user's credentials" is selected and click 'commit'
+    -Click 'Tools' in the righthand corner
+    -Click 'DHCP'
+
+Setting up an IP Scope
+    -Go to the 'DHCP' tab, 
+        -Right click on FS01-SARAH
+        -Select "DHCP Manager"
+        -More steps to come when lab gets comnpleted
+
+https://computingforgeeks.com/how-to-install-and-configure-dhcp-server-on-windows-server/
