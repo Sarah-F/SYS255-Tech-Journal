@@ -1,0 +1,10 @@
+Try all the commands shown in lab images
+
+Create your own Alias
+    Ex: Set-Alias -Name ifconfig -value ipconfig' will allow you to type 'ifconfig' (which is a windows command) and bring up the ipcongig command results
+    I used time and date (Set-Alias -Name time -value date)
+Look at link for list of linux vs. windows commands:
+https://www.geeksforgeeks.org/linux-vs-windows-commands/
+Deliverable 1: screenshot of alias
+
+Create a Scipt
