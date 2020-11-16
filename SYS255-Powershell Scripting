@@ -8,3 +8,69 @@ https://www.geeksforgeeks.org/linux-vs-windows-commands/
 Deliverable 1: screenshot of alias
 
 Create a Scipt
+    mkdir scripting
+    cd scripting
+    notepad servers.txt
+        (in notepad type the following list)
+            champlain.edu
+            vermont.gov
+            google.com
+            reddit.com
+            slashdot.org
+        (save the file)
+        
+    $servers=Get-Content .\server.txt
+    foreach($server in $servers)
+    {
+    Write-Host $server
+    }
+    
+    cat .\servers.ps1
+    $servers=Get-Content .\server.txt
+    foreach($server in $servers)
+    {
+    Write-Host $server
+    }
+    .\servers.ps1
+    Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+    Y
+    .\servers.ps1
+
+Code for deliverable 2:
+    cat .\servers.ps1
+    $servers=Get-Content .\server.txt
+    foreach($server in $servers)
+    {
+    Write-Host $server
+    ping -n 1 $server
+    }
+    .\servers.ps1
+
+Parameters:
+follow code in image
+
+Code for deliverable 3:
+param([string] $listofthings, [string] $type, [string] $servers)
+
+foreach($thing in Get-Content $listofthings)
+{
+  Resolve-DnsName $thing
+}
+
+Deliverable 4: Follow code in image, use 'ping -n 1 google.com' for second command
+
+Deliverable 5: Follow code in image, use 'ping -n 1 google.com' for second command
+
+Deliverable 6: Using powershell on AD01, figure out how to add a single user to Active Directory and how to add that user to a domain group that you create.
+    code to create new user = New-ADUser –SamAccountName “TestUser” –DisplayName “TestUser” –Name “TestUser” –Path ‘OU=Users,OU=SYS-255,DC=sarah,DC=local'
+    https://www.lepide.com/blog/ad-user-management-with-powershell/
+    code to add new user to a group = Add-ADGroupMember -Identity "Users" -Members "TestUser"
+    https://docs.microsoft.com/en-us/powershell/module/addsadministration/add-adgroupmember?view=win10-ps
+    
+Deliverable 7: PS-Remoting
+    code = Get-ADComputer -Filter * | select-object Name 
+        --> this will list available PC's
+    code = Enter-PSSession -ComputerName FS01-SARAH
+        --> this will connect you remotely to FS01
+    code = Invoke-Command -ComputerName FS01-SARAH -ScriptBlock {ipconfig}
+        --> this will allow you to execute a command
